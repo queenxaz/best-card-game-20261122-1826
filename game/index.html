@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMBERCLASH — Duel of the Lantern Keepers</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ TITLE SCREEN ============ -->
+  <section id="title-screen" class="screen">
+    <div class="title-lantern" aria-hidden="true">
+      <svg viewBox="0 0 120 160" class="lantern-svg">
+        <path d="M60 8 L78 34 L60 30 L42 34 Z" fill="#ffd166"/>
+        <rect x="46" y="34" width="28" height="10" rx="2" fill="#8a5a2b"/>
+        <path d="M40 44 L80 44 L88 120 L32 120 Z" fill="#ff9f1c" opacity="0.92"/>
+        <path d="M48 52 L72 52 L76 112 L44 112 Z" fill="#ffe66d"/>
+        <path d="M60 60 C52 74 52 88 60 100 C68 88 68 74 60 60 Z" fill="#ff6b35"/>
+        <rect x="38" y="120" width="44" height="8" rx="2" fill="#8a5a2b"/>
+        <rect x="54" y="128" width="12" height="10" rx="2" fill="#8a5a2b"/>
+      </svg>
+    </div>
+    <h1 class="game-title">EMBERCLASH</h1>
+    <p class="game-subtitle">Duel of the Lantern Keepers</p>
+    <p class="game-tagline">Two keepers. One lantern. Thirty embers of life each.<br>
+    Summon guardians of Flame, Tide, Leaf and Stone — and snuff out your rival's light.</p>
+    <button id="play-button" class="big-button">⚔&nbsp; Begin the Duel</button>
+    <button id="how-button" class="ghost-button">How to play</button>
+    <div id="how-panel" class="how-panel" hidden>
+      <h2>How to play</h2>
+      <ul>
+        <li><b>Goal:</b> reduce Rook's Ember (life) from 30 to 0 before yours reaches 0.</li>
+        <li><b>Each turn</b> you gain +1 mana (up to 10) and draw a card. Click a card in your hand to play it — guardians join your side of the table, spells resolve at once.</li>
+        <li><b>Guardians</b> show attack (bottom-left) and health (bottom-right). When you end your turn, each of your guardians strikes the guardian across from it — or Rook himself if the way is clear.</li>
+        <li><b>Suits:</b> <span class="suit-flame">Flame</span> burns the enemy on summon · <span class="suit-tide">Tide</span> heals you · <span class="suit-leaf">Leaf</span> draws a card · <span class="suit-stone">Stone</span> raises a shield that soaks damage.</li>
+        <li><b>Keyboard:</b> keys <b>1–7</b> play a card from your hand · <b>Enter</b> ends your turn · <b>Esc</b> cancels a selection · <b>M</b> mutes sound.</li>
+      </ul>
+    </div>
+    <p class="title-foot">An original game · no network · best with sound on</p>
+  </section>
+
+  <!-- ============ TABLE SCREEN ============ -->
+  <section id="table-screen" class="screen" hidden>
+    <header id="topbar">
+      <div class="player-chip opponent-chip" id="opponent-chip">
+        <span class="chip-portrait" id="opponent-portrait">🕯️</span>
+        <span class="chip-name">Rook, Warden of the Last Lantern</span>
+        <span class="chip-life"><span class="life-label">EMBER</span><span id="opponent-life" class="life-num">30</span><span class="life-max">/ 30</span></span>
+        <span class="chip-shield" id="opponent-shield" hidden>🛡 <b id="opponent-shield-num">0</b></span>
+        <span class="chip-mana">Mana <b id="opponent-mana">0</b></span>
+        <span class="chip-deck">Deck <b id="opponent-deck">27</b></span>
+      </div>
+      <div id="turn-banner" class="turn-banner">Your turn</div>
+      <div class="player-chip you-chip" id="you-chip">
+        <span class="chip-portrait">🔥</span>
+        <span class="chip-name">You, Keeper of the Ember</span>
+        <span class="chip-life"><span class="life-label">EMBER</span><span id="you-life" class="life-num">30</span><span class="life-max">/ 30</span></span>
+        <span class="chip-shield" id="you-shield" hidden>🛡 <b id="you-shield-num">0</b></span>
+        <span class="chip-mana">Mana <b id="you-mana">0</b> / <b id="you-mana-max">0</b></span>
+        <span class="chip-deck">Deck <b id="you-deck">27</b></span>
+      </div>
+    </header>
+
+    <div id="opponent-hand" class="hand-row opponent-hand" aria-label="Opponent hand"></div>
+
+    <div id="battlefield">
+      <div id="opponent-field" class="field-row" aria-label="Opponent guardians"></div>
+      <div id="midline">
+        <div id="combat-log" aria-live="polite"></div>
+        <button id="end-turn-button" class="big-button end-turn">End Turn ⏎</button>
+      </div>
+      <div id="you-field" class="field-row" aria-label="Your guardians"></div>
+    </div>
+
+    <div id="you-hand" class="hand-row you-hand" aria-label="Your hand"></div>
+
+    <footer id="table-footer">
+      <span class="hint">Click a card to play it · <b>1–7</b> play from hand · <b>Enter</b> end turn · <b>Esc</b> cancel · <b>M</b> sound</span>
+      <span class="round-label">Round <b id="round-num">1</b></span>
+      <button id="mute-button" class="ghost-button small">🔊 Sound on</button>
+      <button id="restart-button" class="ghost-button small">↺ Restart</button>
+    </footer>
+  </section>
+
+  <!-- ============ END SCREEN ============ -->
+  <section id="end-screen" class="screen" hidden>
+    <h1 id="end-title" class="end-title">VICTORY</h1>
+    <p id="end-flavor" class="end-flavor"></p>
+    <div id="end-stats" class="end-stats"></div>
+    <button id="play-again-button" class="big-button">⚔&nbsp; Duel Again</button>
+    <button id="title-button" class="ghost-button">Back to title</button>
+  </section>
+
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
